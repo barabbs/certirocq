@@ -102,8 +102,10 @@ theories/CertiRocqC.vo: theories/CertiRocqC.v $(CERTIROCQ_PIPELINE_DEPS)
 
 theories/compile.v: theories/CertiRocqC.vo
 
+# Compiling CertiRocq with itself overflows the default 8 MB stack (in
+# Codegen, since CodegenLLVM is part of the compiled pipeline)
 theories/compile.vo CertiRocq.CertiRocqC.compile.certirocqc.c &: theories/compile.v theories/CertiRocqC.vo $(CERTIROCQ_PIPELINE_DEPS)
-	coqc $(COQOPTS) $<
+	ulimit -Ss $$(ulimit -Hs) && coqc $(COQOPTS) $<
 
 g_certirocqc.ml: g_certirocqc.mlg certirocqc.cmx certirocqc_plugin_wrapper.cmx
 	coqpp $<
