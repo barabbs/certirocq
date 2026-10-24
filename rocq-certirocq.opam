@@ -20,9 +20,9 @@ authors: ["Andrew Appel"
 license: "MIT"
 build: [
   ["bash" "./configure.sh"]
-  [make "all"]
-  [make "plugins"]
-  [make "bootstrap"]
+  [make "-j%{jobs}%" "all"]
+  [make "-j%{jobs}%" "plugins"]
+  [make "-j%{jobs}%" "bootstrap"]
 ]
 install: [
   [make "install"]
